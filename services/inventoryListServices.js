@@ -1,42 +1,29 @@
-const inventoryListMockData = [
-  {
-    "id": "1",
-    "serialId": "1i3xjRllc",
-    "make": "Toyota",
-    "model": "Rav4",
-    "package": "XSE",
-    "color": "Red",
-    "year": "2018",
-    "category": "SUV",
-    "mileage": "240001",
-    "price": "22750000",
-  }
-];
+const db = require('../models');
 
 exports.getInventoryList = () => {
-  return {
-    success: true,
-    data: inventoryListMockData
-  };
+  return db.InventoryList.findAll()
+    .then((inventoryList) => ({
+      success: true,
+      data: inventoryList
+    }))
+    .catch((err) => {
+      throw new Error(err);
+    });
 };
 
-exports.filterInventoryListById = (serialId) => {
-  const car = inventoryListMockData.find((car) => car.serialId === serialId);
-  if (!car) {
-    return {
-      success: false,
-      data: {},
-    };
-  }
-  return {
-    success: true,
-    data: car
-  };
+exports.filterInventoryListBySerialId = (serialId) => {
+  return db.InventoryList.findAll({ where: { serialId } })
+    .then((inventory) => ({
+      success: true,
+      data: inventory
+    }))
+    .catch((err) => {
+      throw new Error(err);
+    });
 };
 
 exports.addCarToInventoryList = (carProps, serialId) => {
-  const car = {
-    "id": `${(parseInt(inventoryListMockData[inventoryListMockData.length - 1].id) + 1)}`,
+  return db.InventoryList.create({
     "serialId": serialId || null,
     "make": carProps?.make || null,
     "model": carProps?.model || null,
@@ -46,10 +33,11 @@ exports.addCarToInventoryList = (carProps, serialId) => {
     "category": carProps?.category || null,
     "mileage": `${carProps?.mileage || 0}`,
     "price": `${carProps?.price || 0}`,
-  };
-  inventoryListMockData.push(car);
-  return {
+  }).then((inventoryList) => ({
     success: true,
-    message: `Car has been added to the Inventory List successfully`,
-  };
+    data: inventoryList
+  }))
+    .catch((err) => {
+      throw new Error(err);
+    })
 };

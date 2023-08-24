@@ -2,14 +2,14 @@ const inventoryListServices = require('../services/inventoryListServices');
 
 const INTERNAL_SERVER_ERROR = 'An internal error has been ocurred please contact us';
 
-exports.getInventoryList = (req, res) => {
+exports.getInventoryList = async (req, res) => {
   let result = {
     success: false,
     message: INTERNAL_SERVER_ERROR,
     data: []
   };
   try {
-    result = inventoryListServices.getInventoryList();
+    result = await inventoryListServices.getInventoryList();
   } catch (err) {
     console.log({
       err,
@@ -21,7 +21,7 @@ exports.getInventoryList = (req, res) => {
   return res.status(200).send(result);
 };
 
-exports.filterInventoryListById = (req, res) => {
+exports.filterInventoryListBySerialId = async (req, res) => {
   let result = {
     success: false,
     message: INTERNAL_SERVER_ERROR,
@@ -35,11 +35,11 @@ exports.filterInventoryListById = (req, res) => {
         message: `Missing serialId parameter in your request`,
       });
     }
-    result = inventoryListServices.filterInventoryListById(serialId)
+    result = await inventoryListServices.filterInventoryListBySerialId(serialId)
   } catch (err) {
     console.log({
       err,
-      func: "filterInventoryListById",
+      func: "filterInventoryListBySerialId",
       folder: "inventoryListController"
     });
     return res.status(500).send(result);
@@ -47,7 +47,7 @@ exports.filterInventoryListById = (req, res) => {
   return res.status(200).send(result);
 };
 
-exports.addCarToInventoryList = (req, res) => {
+exports.addCarToInventoryList = async (req, res) => {
   let result = {
     success: false,
     message: INTERNAL_SERVER_ERROR,
@@ -60,7 +60,7 @@ exports.addCarToInventoryList = (req, res) => {
         message: `Missing information`,
       });
     }
-    result = inventoryListServices.addCarToInventoryList(req.body, serialId);
+    result = await inventoryListServices.addCarToInventoryList(req.body, serialId);
   } catch(err) {
     console.log({
       err,
