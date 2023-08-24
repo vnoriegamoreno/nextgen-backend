@@ -11,7 +11,7 @@ exports.getInventoryList = (req, res) => {
   try {
     result = inventoryListServices.getInventoryList();
   } catch (err) {
-    console.err({
+    console.log({
       err,
       func: "getInventoryList",
       folder: "inventoryListController"
@@ -37,7 +37,7 @@ exports.filterInventoryListById = (req, res) => {
     }
     result = inventoryListServices.filterInventoryListById(serialId)
   } catch (err) {
-    console.err({
+    console.log({
       err,
       func: "filterInventoryListById",
       folder: "inventoryListController"
@@ -60,9 +60,9 @@ exports.addCarToInventoryList = (req, res) => {
         message: `Missing information`,
       });
     }
-    result = inventoryListServices.addCarToInventoryList(req.body);
+    result = inventoryListServices.addCarToInventoryList(req.body, serialId);
   } catch(err) {
-    console.err({
+    console.log({
       err,
       func: "addCarToInventoryList",
       folder: "inventoryListController"
