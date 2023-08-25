@@ -1,10 +1,12 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const inventoryListRoute = require('./routes/inventoryListRoute');
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const inventoryListRoute = require("./routes/inventoryListRoute");
 
 const app = express();
 
 // Middlewares
+app.use(cors());
 app.use(bodyParser.json());
 app.use((req, res, next) => {
   const now = new Date();
@@ -13,11 +15,13 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/api/inventory-list', inventoryListRoute);
+app.use("/api/inventory-list", inventoryListRoute);
 
 // Route not found
 app.use((req, res, next) => {
-  console.error('There might be an error on your path route, please take a look');
+  console.error(
+    "There might be an error on your path route, please take a look"
+  );
   return res.sendStatus(404);
 });
 
